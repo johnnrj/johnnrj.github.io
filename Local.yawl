@@ -1,0 +1,117 @@
+// Define the `main` function
+
+function main(config) {
+  // const arrL = config.proxies.length;
+  // console.log(arrL)
+  // console.log(config.proxies[arrL-1]);
+  const proxyI = 
+  {
+    "name":"[本地] 搬瓦工",
+    "type":"vless",
+    "server":"elkm.publicvm.com",
+    "port":443,
+    "uuid":"af4cf5d4-959c-43b4-5f1f-97f262b57b3e",
+    "alterId":0,
+    // "cipher":"auto",
+    "udp":false,
+    "tls":true,
+    "network":"ws",
+    "skip-cert-verify":false,   
+    "ws-opts":
+    {
+      "path":"/vOhcX",
+      "headers":
+      {
+        "Host":"elkm.publicvm.com"
+      }
+    }
+  };
+  const proxyII = 
+  {
+    "name":"[本地] Oracle",
+    "type":"vless",
+    "server":"whynot.linkpc.net",
+    "port":443,
+    "uuid":"af4cf5d4-959c-43b4-5f1f-97f262b57b3e",
+    "alterId":0,
+    // "cipher":"auto",
+    "udp":false,
+    "tls":true,
+    "network":"ws",
+    "skip-cert-verify":false,   
+    "ws-opts":
+    {
+      "path":"/vOhcX",
+      "headers":
+      {
+        "Host":"whynot.linkpc.net"
+      }
+    }
+  };
+  config.proxies.push(proxyI);
+  const arrLII = config.proxies.length;
+  console.log(arrLII)
+  console.log(config.proxies[arrLII-1]);
+
+  config.proxies.push(proxyII);
+
+  const arrLIII = config.proxies.length;
+  console.log(arrLIII)
+  console.log(config.proxies[arrLIII-1]);
+
+  
+  const LocalGrp =
+  {
+    "name":"Loacl",
+    "type":"select",
+    "proxies":["[本地] 搬瓦工","[本地] Oracle"],
+  };
+
+  config["proxy-groups"].push(LocalGrp);
+
+  const group = config["proxy-groups"].find((item) => item.type === "select");
+  if (group) 
+  {
+    // console.log(group.proxies[0]);
+    group.proxies.push("Loacl");
+  }
+
+  var NewProvider =
+  {
+    "proxy-providers":
+    {
+      "Local":
+      {
+        "type":"http",
+        "url":"https://raw.githubusercontent.com/johnnrj/johnnrj.github.io/master/d1y1",
+        "interval":3600,
+        "path":"./Local.yaml",
+        "health-check":
+        {
+          "enable":true,
+          "interval":600,
+          "url":"http://www.gstatic.com/generate_204"
+        }
+      }
+    }
+  };
+  Object.assign(config,NewProvider);
+  
+  const LocalGrp =
+  {
+    "name":"Local-Sub",
+    "type":"select",
+    "use":["Local"]
+  };
+
+  config["proxy-groups"].push(LocalGrp);
+
+  const group = config["proxy-groups"].find((item) => item.type === "select");
+  if (group) 
+  {
+    // console.log(group.proxies[0]);
+    group.proxies.push("Local-Sub");
+  }
+
+  return config;
+}
